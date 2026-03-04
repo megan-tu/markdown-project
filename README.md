@@ -1,7 +1,7 @@
 # Markdown to HTML compiler
 
 ![command_line](https://github.com/megan-tu/markdown-project/actions/workflows/command_line.yaml/badge.svg)
-![](https://github.com/megan-tu/markdown-compiler.git/workflows/flake8/badge.svg)&nbsp;
+[![doctests](https://github.com/megan-tu/markdown-project/actions/workflows/doctests.yaml/badge.svg)](https://github.com/megan-tu/markdown-project/actions/workflows/doctests.yaml)
 ![flake8](https://github.com/megan-tu/markdown-project/actions/workflows/flake8.yaml/badge.svg)
 
 A simple project for converting markdown files to HTML.
