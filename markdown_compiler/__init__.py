@@ -14,7 +14,7 @@ from markdown_compiler.util.line_functions import (
     compile_images,
     compile_links,
 )
-#from util.line_functions import *
+
 
 
 def compile_lines(text):
@@ -39,7 +39,7 @@ def compile_lines(text):
     in_pre = False
     for line in lines:
         line = line.strip()
-        if line=="```":
+        if line == "```":
             if in_pre:
                 new_lines.append('</pre>')
                 in_pre = False
@@ -107,10 +107,10 @@ def markdown_to_html(markdown, add_css):
 <link rel="stylesheet" href="https://izbicki.me/css/code.css" />
 <link rel="stylesheet" href="https://izbicki.me/css/default.css" />
         '''
-    html+='''
+    html += '''
 </head>
 <body>
-    '''+compile_lines(markdown)+'''
+    ''' +compile_lines(markdown) +'''
 </body>
 </html>
     '''
@@ -146,6 +146,7 @@ def minify(html):
     '''
     return " ".join(html.split())
 
+
 def convert_file(input_file, add_css):
     '''
     Convert the input markdown file into an HTML file.
@@ -172,5 +173,5 @@ def convert_file(input_file, add_css):
     html = minify(html)
 
     # write the output file
-    with open(input_file[:-2]+'html', 'w') as f:
+    with open(input_file[:-2] + 'html', 'w') as f:
         f.write(html)
