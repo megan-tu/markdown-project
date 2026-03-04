@@ -29,22 +29,29 @@ def compile_lines(text):
     in_pre = False
     for line in lines:
         line = line.strip()
-        if line=='':
-            if in_paragraph:
-                line='</p>'
-                in_paragraph = False
+        if line=="```":
             if in_pre:
-                line= '</pre>'
+                new_lines.append('</pre>')
                 in_pre = False
-        elif line =="```":
-            if line[0:] !='#' and not in_pre:
+            else:
+                new_lines.append('<pre>')
                 in_pre = True
-                line = '<pre>\n'
-                in_pre = False
+            continue
+        if in_pre:
+            new_lines.append()
+            continue
+        if line == '':
+            if in_paragraph:
+                new_lines.append('</p>')
+                in_paragraph = False
+            else:
+                new_lines.append('')
+            continue
         else:
-            if line[0:] != '#' and not in_paragraph and not in_pre:
+            if not in_paragraph and not line.startswith('#'):
+                new_lines.append('<p>')
                 in_paragraph = True
-                line = '<p>\n' + line
+
             line = compile_headers(line)
             line = compile_strikethrough(line)
             line = compile_bold_stars(line)
@@ -127,12 +134,7 @@ def minify(html):
     >>> minify('a\n\n\n\n\n\n\n\n\n\n\n\n\n\nb\n\n\n\n\n\n\n\n\n\n')
     'a b'
     '''
-    
-    html = ''
-    for line in lines:
-        line = line.strip()
-    return html
-
+    return " ".join(html.split())
 
 def convert_file(input_file, add_css):
     '''
