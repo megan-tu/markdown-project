@@ -26,6 +26,18 @@ def compile_headers(line):
     >>> compile_headers('      # this is not a header')
     '      # this is not a header'
     '''
+    if line[0:2] == '# ':
+        line = line.replace('# ', '<h1> ') + '</h1>'
+    if line[:3] == '## ':
+        line = line.replace('## ', '<h2> ') + '</h2>'
+    if line[:4] == '### ':
+        line = line.replace('### ', '<h3> ') + '</h3>'
+    if line[:5] == '#### ':
+        line = line.replace('#### ', '<h4> ') + '</h4>'
+    if line[:6] == '##### ':
+        line = line.replace('##### ', '<h5> ') + '</h5>'
+    if line[:7] == '###### ':
+        line = line.replace('###### ', '<h6> ') + '</h6>'
     return line
 
 
@@ -50,7 +62,21 @@ def compile_italic_star(line):
     >>> compile_italic_star('*')
     '*'
     '''
-    return line
+    result = ''
+    i = 0
+    while i < len(line):
+        if line[i] == '*':
+            end = line.find('*', i+1)
+            if end != -1:
+                result += '<i>' + line[i+1:end] + '</i>'
+                i = end + 1
+            else:
+                result += line[i]
+                i += 1
+        else:
+            result += line[i]
+            i += 1
+    return result
 
 
 def compile_italic_underscore(line):
@@ -71,7 +97,21 @@ def compile_italic_underscore(line):
     >>> compile_italic_underscore('_')
     '_'
     '''
-    return line
+    result = ''
+    i = 0
+    while i < len(line):
+        if line[i] == '_':
+            end = line.find('_', i+1)
+            if end != -1:
+                result += '<i>' + line[i+1:end] + '</i>'
+                i = end + 1
+            else:
+                result += line[i]
+                i += 1
+        else:
+            result += line[i]
+            i += 1
+    return result
 
 
 def compile_strikethrough(line):
@@ -94,7 +134,14 @@ def compile_strikethrough(line):
     >>> compile_strikethrough('~~')
     '~~'
     '''
-    return line
+    start = line.find('~~')
+    if start == -1:
+        return line
+    end = line[start + 2:].find('~~')
+    if end == -1:
+        return line
+    end = end + start + 2
+    return line[:start] + '<ins>' + line[start + 2:end] + '</ins>' + line[end + 2:]
 
 
 def compile_bold_stars(line):
@@ -115,7 +162,14 @@ def compile_bold_stars(line):
     >>> compile_bold_stars('**')
     '**'
     '''
-    return line
+    start = line.find('**')
+    if start == -1:
+        return line
+    end = line[start + 2:].find('**')
+    if end == -1:
+        return line
+    end = end + start + 2
+    return line[:start] + '<b>' + line[start + 2:end] + '</b>' + line[end + 2:]
 
 
 def compile_bold_underscore(line):
@@ -136,7 +190,14 @@ def compile_bold_underscore(line):
     >>> compile_bold_underscore('__')
     '__'
     '''
-    return line
+    start = line.find('__')
+    if start == -1:
+        return line
+    end = line[start + 2:].find('__')
+    if end == -1:
+        return line
+    end = end + start + 2
+    return line[:start] + '<b>' + line[start + 2:end] + '</b>' + line[end + 2:]
 
 
 def compile_code_inline(line):
@@ -166,7 +227,43 @@ def compile_code_inline(line):
     >>> compile_code_inline('```python3')
     '```python3'
     '''
-    return line
+    result = ''
+    i = 0
+    t = 0
+    while i < len(line):
+        start = line.find('```')
+        if start != -1:
+            return line
+        else:
+            if line[i] == '`':
+                end = line.find('`', i+1)
+                if end != -1:
+                    result += '<code>'
+                    i += 1
+                    t += 1
+                else:
+                    result += '</code>'
+                    i += 1
+            elif line[i] == '<':
+                end = line.find('<')
+                if end != -1 and t >= 1:
+                    result += '&lt;'
+                    i += 1
+                else:
+                    result += line[i]
+                    i += 1
+            elif line[i] == '>':
+                end = line.find('>')
+                if end != -1 and t >= 1:
+                    result += '&gt;'
+                    i += 1
+                else:
+                    result += line[i]
+                    i += 1
+            else:
+                result += line[i]
+                i += 1
+    return result
 
 
 def compile_links(line):
@@ -186,7 +283,26 @@ def compile_links(line):
     >>> compile_links('this is wrong: [course webpage](https://github.com/mikeizbicki/cmc-csci040')
     'this is wrong: [course webpage](https://github.com/mikeizbicki/cmc-csci040'
     '''
-    return line
+    start = line.find('](')
+    if start == -1:
+        return line
+    else:
+        result = ''
+        i = 0
+        while i < len(line):
+            if line[i] == '[':
+                link = line.find(')', i+1)
+                end = line.find(']', i+1)
+                if link != -1:
+                    result += '''<a href="''' + line[end+2:link] + '''">''' + line[i+1:end] + '</a>'
+                    i = link + 1
+                else:
+                    result += line[i]
+                    i += 1
+            else:
+                result += line[i]
+                i += 1
+    return result
 
 
 def compile_images(line):
@@ -205,4 +321,23 @@ def compile_images(line):
     >>> compile_images('This is an image of Mike Izbicki: ![Mike Izbicki](https://avatars1.githubusercontent.com/u/1052630?v=2&s=460)')
     'This is an image of Mike Izbicki: <img src="https://avatars1.githubusercontent.com/u/1052630?v=2&s=460" alt="Mike Izbicki" />'
     '''
-    return line
+    start = line.find('](')
+    if start == -1:
+        return line
+    else:
+        result = ''
+        i = 0
+        while i < len(line):
+            if line[i] == '!':
+                link = line.find(')', i+1)
+                end = line.find(']', i+1)
+                if link != -1:
+                    result += '''<img src="''' + line[end+2:link] + '''" alt="''' + line[i+2:end] + '''" />'''
+                    i = link + 1
+                else:
+                    result += line[i]
+                    i += 1
+            else:
+                result += line[i]
+                i += 1
+    return result

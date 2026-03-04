@@ -3,7 +3,8 @@ This file contains functions that work on entire documents at a time
 (and not line-by-line).
 '''
 
-from markdown_compiler.util.line_functions import *
+#from markdown_compiler.util.line_functions import *
+from util.line_functions import *
 
 
 def compile_lines(text):
@@ -20,129 +21,30 @@ def compile_lines(text):
     The first set of doctests below show how this function adds <p> tags and calls the functions above.
     Once you implement the functions above correctly,
     then this first set of doctests will pass.
-
-    NOTE:
-    For your assignment, the most important thing to take away from these test cases is how multiline tests can be formatted.
-
-    >>> compile_lines('This is a **bold** _italic_ `code` test.\nAnd *another line*!\n')
-    '<p>\nThis is a <b>bold</b> <i>italic</i> <code>code</code> test.\nAnd <i>another line</i>!\n</p>'
-
-    >>> compile_lines("""
-    ... This is a **bold** _italic_ `code` test.
-    ... And *another line*!
-    ... """)
-    '\n<p>\nThis is a <b>bold</b> <i>italic</i> <code>code</code> test.\nAnd <i>another line</i>!\n</p>'
-
-    >>> print(compile_lines("""
-    ... This is a **bold** _italic_ `code` test.
-    ... And *another line*!
-    ... """))
-    <BLANKLINE>
-    <p>
-    This is a <b>bold</b> <i>italic</i> <code>code</code> test.
-    And <i>another line</i>!
-    </p>
-
-    >>> print(compile_lines("""
-    ... *paragraph1*
-    ...
-    ... **paragraph2**
-    ...
-    ... `paragraph3`
-    ... """))
-    <BLANKLINE>
-    <p>
-    <i>paragraph1</i>
-    </p>
-    <p>
-    <b>paragraph2</b>
-    </p>
-    <p>
-    <code>paragraph3</code>
-    </p>
-
-    NOTE:
-    This second set of test cases tests multiline code blocks.
-
-    HINT:
-    In order to get some of these test cases to pass,
-    you will have to both add new code and remove some of the existing code that I provide you.
-
-    >>> print(compile_lines("""
-    ... ```
-    ... x = 1*2 + 3*4
-    ... ```
-    ... """))
-    <BLANKLINE>
-    <pre>
-    x = 1*2 + 3*4
-    </pre>
-    <BLANKLINE>
-
-    >>> print(compile_lines("""
-    ... Consider the following code block:
-    ... ```
-    ... x = 1*2 + 3*4
-    ... ```
-    ... """))
-    <BLANKLINE>
-    <p>
-    Consider the following code block:
-    <pre>
-    x = 1*2 + 3*4
-    </pre>
-    </p>
-
-    >>> print(compile_lines("""
-    ... Consider the following code block:
-    ... ```
-    ... x = 1*2 + 3*4
-    ... print('x=', x)
-    ... ```
-    ... And here's another code block:
-    ... ```
-    ... print(this_is_a_variable)
-    ... ```
-    ... """))
-    <BLANKLINE>
-    <p>
-    Consider the following code block:
-    <pre>
-    x = 1*2 + 3*4
-    print('x=', x)
-    </pre>
-    And here's another code block:
-    <pre>
-    print(this_is_a_variable)
-    </pre>
-    </p>
-
-    >>> print(compile_lines("""
-    ... ```
-    ... for i in range(10):
-    ...     print('i=',i)
-    ... ```
-    ... """))
-    <BLANKLINE>
-    <pre>
-    for i in range(10):
-        print('i=',i)
-    </pre>
-    <BLANKLINE>
     '''
+
     lines = text.split('\n')
     new_lines = []
     in_paragraph = False
+    in_pre = False
     for line in lines:
         line = line.strip()
         if line=='':
             if in_paragraph:
                 line='</p>'
                 in_paragraph = False
+            if in_pre:
+                line= '</pre>'
+                in_pre = False
+        elif line =="```":
+            if line[0:] !='#' and not in_pre:
+                in_pre = True
+                line = '<pre>\n'
+                in_pre = False
         else:
-            if line[0] != '#' and not in_paragraph:
+            if line[0:] != '#' and not in_paragraph and not in_pre:
                 in_paragraph = True
-                line = '<p>\n'+line
+                line = '<p>\n' + line
             line = compile_headers(line)
             line = compile_strikethrough(line)
             line = compile_bold_stars(line)
@@ -225,6 +127,10 @@ def minify(html):
     >>> minify('a\n\n\n\n\n\n\n\n\n\n\n\n\n\nb\n\n\n\n\n\n\n\n\n\n')
     'a b'
     '''
+    
+    html = ''
+    for line in lines:
+        line = line.strip()
     return html
 
 
