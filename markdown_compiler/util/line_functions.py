@@ -2,6 +2,7 @@
 Each of the functions in this file takes a single line of input and transforms the line in some way.
 '''
 
+
 def compile_headers(line):
     '''
     Convert markdown headers into <h1>,<h2>,etc tags.
@@ -66,9 +67,9 @@ def compile_italic_star(line):
     i = 0
     while i < len(line):
         if line[i] == '*':
-            end = line.find('*', i+1)
+            end = line.find('*', i + 1)
             if end != -1:
-                result += '<i>' + line[i+1:end] + '</i>'
+                result += '<i>' + line[i + 1:end] + '</i>'
                 i = end + 1
             else:
                 result += line[i]
@@ -101,9 +102,9 @@ def compile_italic_underscore(line):
     i = 0
     while i < len(line):
         if line[i] == '_':
-            end = line.find('_', i+1)
+            end = line.find('_', i + 1)
             if end != -1:
-                result += '<i>' + line[i+1:end] + '</i>'
+                result += '<i>' + line[ + 1:end] + '</i>'
                 i = end + 1
             else:
                 result += line[i]
@@ -236,7 +237,7 @@ def compile_code_inline(line):
             return line
         else:
             if line[i] == '`':
-                end = line.find('`', i+1)
+                end = line.find('`', i + 1)
                 if end != -1:
                     result += '<code>'
                     i += 1
@@ -291,10 +292,10 @@ def compile_links(line):
         i = 0
         while i < len(line):
             if line[i] == '[':
-                link = line.find(')', i+1)
-                end = line.find(']', i+1)
+                link = line.find(')', i + 1)
+                end = line.find(']', i + 1)
                 if link != -1:
-                    result += '''<a href="''' + line[end+2:link] + '''">''' + line[i+1:end] + '</a>'
+                    result += '''<a href="''' + line[end + 2:link] + '''">''' + line[i + 1:end] + '</a>'
                     i = link + 1
                 else:
                     result += line[i]
@@ -329,10 +330,10 @@ def compile_images(line):
         i = 0
         while i < len(line):
             if line[i] == '!':
-                link = line.find(')', i+1)
-                end = line.find(']', i+1)
+                link = line.find(')', i + 1)
+                end = line.find(']', i + 1)
                 if link != -1:
-                    result += '''<img src="''' + line[end+2:link] + '''" alt="''' + line[i+2:end] + '''" />'''
+                    result += '''<img src="''' + line[end + 2:link] + '''" alt="''' + line[i + 2:end] + '''" />'''
                     i = link + 1
                 else:
                     result += line[i]

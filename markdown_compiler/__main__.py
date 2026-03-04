@@ -52,5 +52,6 @@ def main():
     # call the main function
     convert_file(args.input_file, False)
 
+
 if __name__ == '__main__':
     main()

@@ -16,7 +16,6 @@ from markdown_compiler.util.line_functions import (
 )
 
 
-
 def compile_lines(text):
     r'''
     Apply all markdown transformations to the input text.
@@ -110,7 +109,7 @@ def markdown_to_html(markdown, add_css):
     html += '''
 </head>
 <body>
-    ''' +compile_lines(markdown) +'''
+    ''' + compile_lines(markdown) + '''
 </body>
 </html>
     '''
