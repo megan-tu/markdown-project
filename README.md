@@ -1,6 +1,6 @@
 # Markdown to HTML compiler
 
-![](https://github.com/megan-tu/markdown-compiler.git/workflows/doctests/badge.svg)&nbsp;
+![command_line](https://github.com/megan-tu/markdown-project/actions/workflows/command_line.yaml/badge.svg)
 ![](https://github.com/megan-tu/markdown-compiler.git/workflows/flake8/badge.svg)&nbsp;
 ![flake8](https://github.com/megan-tu/markdown-project/actions/workflows/flake8.yaml/badge.svg)
 
