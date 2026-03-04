@@ -38,7 +38,7 @@ def compile_lines(text):
                 in_pre = True
             continue
         if in_pre:
-            new_lines.append()
+            new_lines.append(line)
             continue
         if line == '':
             if in_paragraph:
