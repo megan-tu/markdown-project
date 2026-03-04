@@ -3,8 +3,8 @@ This file contains functions that work on entire documents at a time
 (and not line-by-line).
 '''
 
-#from markdown_compiler.util.line_functions import *
-from util.line_functions import *
+from markdown_compiler.util.line_functions import *
+#from util.line_functions import *
 
 
 def compile_lines(text):
