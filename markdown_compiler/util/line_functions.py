@@ -104,7 +104,7 @@ def compile_italic_underscore(line):
         if line[i] == '_':
             end = line.find('_', i + 1)
             if end != -1:
-                result += '<i>' + line[ + 1:end] + '</i>'
+                result += '<i>' + line[+ 1:end] + '</i>'
                 i = end + 1
             else:
                 result += line[i]
